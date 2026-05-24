@@ -260,7 +260,10 @@ async def lifespan(app: FastAPI):
             log_event(f"Failed to start Telegram Bot: {e}", "error")
     else:
         bot_active = False
-        log_event("BOT_TOKEN is missing. Telegram bot is disabled.", "warning")
+        if not TOKEN:
+            log_event("BOT_TOKEN is missing. Telegram bot is disabled.", "warning")
+        elif ENVIRONMENT != "production":
+            log_event(f"Telegram bot disabled. ENVIRONMENT is '{ENVIRONMENT}', needs 'production'.", "warning")
 
     yield
 
