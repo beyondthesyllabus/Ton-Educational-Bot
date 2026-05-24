@@ -32,7 +32,7 @@ from telegram.ext import (
 load_dotenv("env/key.env")
 TOKEN = os.getenv("BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-ENVIRONMENT = os.getenv("ENVIRONMENT", "local")  # Set to 'production' on Render
+IS_RENDER = os.getenv("RENDER") == "true"  # Render automatically sets RENDER=true
 
 # -------------------------------
 # Logging
@@ -235,7 +235,7 @@ async def lifespan(app: FastAPI):
         log_event("OPENAI_API_KEY is missing. Running in fallback mode.", "warning")
 
     # 3. Start Telegram Bot (only in production to avoid 409 conflict locally)
-    if TOKEN and ENVIRONMENT == "production":
+    if TOKEN and IS_RENDER:
         try:
             log_event("Starting Telegram bot polling...", "system")
             bot_app = ApplicationBuilder().token(TOKEN).build()
@@ -262,8 +262,8 @@ async def lifespan(app: FastAPI):
         bot_active = False
         if not TOKEN:
             log_event("BOT_TOKEN is missing. Telegram bot is disabled.", "warning")
-        elif ENVIRONMENT != "production":
-            log_event(f"Telegram bot disabled. ENVIRONMENT is '{ENVIRONMENT}', needs 'production'.", "warning")
+        elif not IS_RENDER:
+            log_event("Telegram bot disabled. Running locally (not on Render).", "warning")
 
     yield
 
