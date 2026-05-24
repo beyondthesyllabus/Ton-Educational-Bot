@@ -3,6 +3,7 @@ import io
 import logging
 import asyncio
 import requests
+import uvicorn
 from datetime import datetime
 from typing import Optional, List
 from contextlib import asynccontextmanager
@@ -439,8 +440,6 @@ else:
 # Main runner
 # -------------------------------
 if __name__ == "__main__":
-    import uvicorn
-    # Load env again to ensure local terminal context matches
     port = int(os.getenv("PORT", 8000))
     log_event(f"Starting server.py on http://0.0.0.0:{port}...", "system")
     uvicorn.run("server:app", host="0.0.0.0", port=port, reload=False)
