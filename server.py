@@ -1,7 +1,7 @@
 import os
 import io
-import logging
 import asyncio
+import logging
 import uvicorn
 from datetime import datetime
 from typing import Optional
@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from openai import AsyncOpenAI
+from openai import OpenAI
 
 from telegram import Update
 from telegram.ext import (
@@ -146,15 +146,15 @@ async def ton_qa(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if "ton" in user_msg.lower() or "blockchain" in user_msg.lower():
         try:
-            response = await openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_msg}
-                ],
-                timeout=15
+            response = await asyncio.to_thread(
+                openai_client.responses.create,
+                prompt={
+                    "id": "pmpt_6a12518928a4819598acc858c283a8540b5219277297c774",
+                    "version": "2"
+                },
+                input=user_msg
             )
-            answer = response.choices[0].message.content
+            answer = response.output_text
             log_event(f"Telegram: Answered question for {username}.", "success")
         except Exception as e:
             log_event(f"Telegram: OpenAI error: {e}", "error")
@@ -223,7 +223,7 @@ async def lifespan(app: FastAPI):
     # 2. Configure OpenAI Client
     if OPENAI_API_KEY:
         try:
-            openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+            openai_client = OpenAI(api_key=OPENAI_API_KEY)
             openai_configured = True
             log_event("OpenAI client initialized successfully.", "success")
         except Exception as e:
@@ -310,15 +310,15 @@ async def api_chat(payload: ChatRequest):
         return {"reply": f"⚠️ *OpenAI API Key not configured. Showing local response:*\n\n{fallback_reply}"}
 
     try:
-        response = await openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_msg}
-            ],
-            timeout=15
+        response = await asyncio.to_thread(
+            openai_client.responses.create,
+            prompt={
+                "id": "pmpt_6a12518928a4819598acc858c283a8540b5219277297c774",
+                "version": "2"
+            },
+            input=user_msg
         )
-        answer = response.choices[0].message.content
+        answer = response.output_text
         log_event("Web API: OpenAI reply sent.", "success")
         return {"reply": answer}
     except Exception as e:
