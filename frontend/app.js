@@ -2,6 +2,9 @@
 let currentTab = 'dashboard';
 let selectedFile = null;
 
+// Backend URL - points directly to Render backend
+const BASE_URL = 'https://ton-educational-bot.onrender.com';
+
 // Quiz state
 let quizQuestions = [
     {
@@ -204,7 +207,7 @@ async function handleChatSubmit(event) {
                 formData.append('prompt', userText);
             }
             
-            const response = await fetch('/api/upload', {
+            const response = await fetch(`${BASE_URL}/api/upload`, {
                 method: 'POST',
                 body: formData
             });
@@ -229,7 +232,7 @@ async function handleChatSubmit(event) {
         } else {
             // Send text to Chatbot OpenAI endpoint
             addLogLine(`Sending prompt to OpenAI API...`, 'info');
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${BASE_URL}/api/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -404,7 +407,7 @@ function showQuizResults() {
 // Status Updates Polling
 async function checkBotStatus() {
     try {
-        const response = await fetch('/api/status');
+        const response = await fetch(`${BASE_URL}/api/status`);
         const data = await response.json();
         
         if (response.ok) {
