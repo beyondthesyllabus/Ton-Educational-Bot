@@ -2,8 +2,11 @@
 let currentTab = 'dashboard';
 let selectedFile = null;
 
-// Backend URL - points directly to Render backend
-const BASE_URL = 'https://ton-educational-bot.onrender.com';
+// Backend URL - auto-detects local vs production
+const BASE_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''  // local: use relative URLs (same server)
+    : 'https://ton-educational-bot.onrender.com';  // production: point to Render
+
 
 // Quiz state
 let quizQuestions = [
