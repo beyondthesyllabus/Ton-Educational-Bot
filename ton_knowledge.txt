@@ -1,0 +1,52 @@
+# ==========================================
+# THE OPEN NETWORK (TON) KNOWLEDGE BASE
+# ==========================================
+
+1. OVERVIEW & HISTORY
+- Name: The Open Network (TON)
+- Originally designed by: Nikolai and Pavel Durov (founders of Telegram) in 2018.
+- Current Developers: Managed and maintained by the independent TON Foundation and an active open-source community since Telegram stepped away due to regulatory issues in 2020.
+- Vision: A decentralized, high-speed layer-1 blockchain capable of onboarding billions of users by integration directly inside Telegram.
+
+2. ARCHITECTURAL HIGHLIGHTS (HOW TON WORKS)
+- Blockchain of Blockchains: TON is built as a collection of blockchains.
+- Masterchain: The single main blockchain containing protocol parameters, validator sets, and stake allocations. It acts as the coordinator.
+- Workchains: Up to 2^32 independent blockchains containing transactions of smart contracts and jettons. Currently, only Workchain 0 (Basechain) is active.
+- Shardchains: Each Workchain can split dynamically into up to 60 shardchains. Shardchains process transactions in parallel.
+- Infinite Dynamic Sharding: If the transaction load increases, a shardchain splits into two. When the load drops, they merge back. This prevents congestion and maintains sub-second transaction times.
+- Asynchronous Actor Model: Smart contracts in TON are "actors." They do not call each other directly or synchronously (unlike Ethereum). Instead, they communicate by sending asynchronous, one-way messages.
+- Asynchronous Processing: A transaction on TON is split into multiple phases (e.g. storage phase, credit phase, compute phase, action phase). Messages sent between contracts travel across shards and execute in separate blocks.
+- Hypercube Routing: Messages between shards are routed along paths in a virtual hypercube network, guaranteeing that even with millions of shards, messages reach their destination in log(n) steps.
+
+3. SMART CONTRACTS & THE TON VIRTUAL MACHINE (TVM)
+- Engine: The TON Virtual Machine (TVM) executes code.
+- Languages:
+  1. Tact: A modern, developer-friendly, statically typed programming language. It has a Python/Swift-like syntax, compiles to FunC, and includes built-in safety features like automatic integer overflow protection and strong type checks. Recommended for beginners and general dApp developers.
+  2. FunC: A lower-level, statically typed language with syntax similar to C. It allows direct manipulation of TVM registers, cell serialization, and gas optimizations. It is used to write core protocol contracts, Jettons, and complex validator architectures.
+- Data Storage (Cells): TVM stores all data in tree structures composed of "Cells." A cell is a bit string containing up to 1023 bits of data and up to 4 references to other cells.
+
+4. NATIVE TOKEN: TONCOIN (TON)
+- Native currency: Toncoin (ticker: TON).
+- Core Utilities:
+  1. Gas Fees: Used to pay for transaction validation and smart contract execution.
+  2. Storage Fees: Paid to keep data stored in smart contracts (unpaid contracts can be frozen and deleted).
+  3. Staking: Validators lock up large amounts of TON to participate in block consensus and earn block rewards. Nominal delegators can pool their TON via staking pools.
+  4. Governance: Voting on protocol changes and parameter adjustments.
+  5. Telegram Ecosystem utility: Buying ads, Telegram usernames, Telegram Premium subscriptions, and purchasing in-app items in Telegram Mini Apps.
+
+5. ECOSYSTEM STANDARDS
+- Jettons: The standard for fungible tokens on TON (equivalent to ERC-20 on Ethereum). Unlike ERC-20, a user's Jetton balance is stored in a separate "Jetton Wallet" smart contract created specifically for their address, ensuring sharded scaling.
+- NFTs: Non-Fungible Tokens. Similar to Jettons, each NFT is a separate smart contract linked to an NFT Collection coordinator contract.
+- TON DNS: Domain Name Service. Translates complex wallet addresses into human-readable domains (e.g., "alice.ton").
+- TON Storage: A decentralized file-storage technology similar to IPFS, allowing files to be distributed across validator nodes and retrieved via magnet links.
+
+6. WALLETS & Telegram Integration
+- Telegram @Wallet: A custodial wallet accessible inside Telegram settings. Users can send Toncoin to contacts instantly without fees.
+- TON Space: A self-custodial (non-custodial) wallet integrated directly inside Telegram's @Wallet interface, allowing users to interact with decentralized applications (dApps) without leaving the Telegram app.
+- Tonkeeper / MyTonWallet: Standalone, popular non-custodial browser extensions and mobile apps where users hold their own 24-word private seed recovery phrase.
+- P2P Market: Telegram's @Wallet includes a peer-to-peer trading market where users can buy and sell Toncoin using fiat currencies.
+
+7. VALIDATORS & CONSENSUS
+- Consensus Mechanism: Byzantine Fault Tolerant (BFT) Proof-of-Stake (PoS).
+- Validator Nodes: High-performance servers that stake TON, package transactions, and vote on block creation.
+- Nominator Pools: Smart contracts that allow small TON holders to delegate their tokens to validator nodes safely, splitting rewards and penalties automatically.

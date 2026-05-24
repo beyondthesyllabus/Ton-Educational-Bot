@@ -1,0 +1,23 @@
+# Virtual environment
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE settings
+.vscode/
+.idea/
+
+# Local sensitive environment variables
+env/key.env
+.env
+
+# Local runtime downloads / media
+downloads/
+temp/
+/downloads
+/temp

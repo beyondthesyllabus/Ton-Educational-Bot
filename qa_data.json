@@ -1,0 +1,22 @@
+[
+  {
+    "keywords": ["what is ton", "about ton", "ton network", "overview"],
+    "answer": "The Open Network (TON) is a fast, secure, and scalable Layer-1 blockchain originally designed by the Telegram team. It supports a vast number of users and transactions through its sharding technology, known as 'Infinite Sharding Paradigm'."
+  },
+  {
+    "keywords": ["ton features", "ton benefits", "what makes ton unique"],
+    "answer": "Key features of TON include: 1. Infinite Sharding for massive scalability. 2. Proof-of-Stake consensus for energy efficiency. 3. TON Storage for decentralized file storage. 4. TON DNS for human-readable crypto addresses. 5. TON Services for decentralized apps."
+  },
+  {
+    "keywords": ["toncoin", "ton token", "what is toncoin"],
+    "answer": "Toncoin (TON) is the native cryptocurrency of the TON blockchain. It is used for network fees (gas), securing the blockchain through staking, and as a governance token."
+  },
+  {
+    "keywords": ["use cases", "applications", "ton mini apps"],
+    "answer": "TON supports a wide range of use cases, including decentralized finance (DeFi), NFT marketplaces, web3 games, and decentralized payments. Many TON applications run directly inside Telegram as Mini Apps, like Notcoin."
+  },
+  {
+    "keywords": ["how to get ton", "buy toncoin", "ton exchanges"],
+    "answer": "You can obtain Toncoin by purchasing it on cryptocurrency exchanges. You can also use integrated wallets within Telegram to buy, send, and receive TON."
+  }
+]
