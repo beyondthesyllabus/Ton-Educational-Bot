@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 from telegram import Update
 from telegram.ext import (
@@ -29,7 +29,7 @@ from telegram.ext import (
 # -------------------------------
 # Environment Setup
 # -------------------------------
-load_dotenv("env/key.env")
+load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 IS_RENDER = os.getenv("RENDER") == "true"  # Render automatically sets RENDER=true
@@ -147,8 +147,7 @@ async def ton_qa(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if "ton" in user_msg.lower() or "blockchain" in user_msg.lower():
         try:
-            response = await asyncio.to_thread(
-                openai_client.responses.create,
+            response = await openai_client.responses.create(
                 prompt={
                     "id": "pmpt_6a12518928a4819598acc858c283a8540b5219277297c774",
                     "version": "2"
@@ -158,7 +157,9 @@ async def ton_qa(update: Update, context: ContextTypes.DEFAULT_TYPE):
             answer = response.output_text
             log_event(f"Telegram: Answered question for {username}.", "success")
         except Exception as e:
-            log_event(f"Telegram: OpenAI error: {e}", "error")
+            import traceback
+            err_details = traceback.format_exc()
+            log_event(f"Telegram: OpenAI error: {e}. Details: {err_details}", "error")
             answer = get_ton_fallback_response(user_msg)
         await update.message.reply_text(answer)
     else:
@@ -224,7 +225,11 @@ async def lifespan(app: FastAPI):
     # 2. Configure OpenAI Client
     if OPENAI_API_KEY:
         try:
-            openai_client = OpenAI(api_key=OPENAI_API_KEY)
+            openai_client = AsyncOpenAI(
+                api_key=OPENAI_API_KEY,
+                timeout=60.0,
+                max_retries=3
+            )
             openai_configured = True
             log_event("OpenAI client initialized successfully.", "success")
         except Exception as e:
@@ -314,8 +319,7 @@ async def api_chat(payload: ChatRequest):
         return {"reply": f"⚠️ *OpenAI API Key not configured. Showing local response:*\n\n{fallback_reply}"}
 
     try:
-        response = await asyncio.to_thread(
-            openai_client.responses.create,
+        response = await openai_client.responses.create(
             prompt={
                 "id": "pmpt_6a12518928a4819598acc858c283a8540b5219277297c774",
                 "version": "2"
@@ -326,7 +330,9 @@ async def api_chat(payload: ChatRequest):
         log_event("Web API: OpenAI reply sent.", "success")
         return {"reply": answer}
     except Exception as e:
-        log_event(f"Web API: OpenAI error: {e}. Using fallback.", "error")
+        import traceback
+        err_details = traceback.format_exc()
+        log_event(f"Web API: OpenAI error: {e}. Details: {err_details}. Using fallback.", "error")
         fallback_reply = get_ton_fallback_response(user_msg)
         return {"reply": f"⚠️ *AI unavailable. Showing local response:*\n\n{fallback_reply}"}
 
