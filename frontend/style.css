@@ -60,7 +60,7 @@ body.light-theme {
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
-    height: 100vh;
+    height: 100dvh; /* Use dvh for mobile browsers */
     overflow: hidden;
 }
 
@@ -86,7 +86,7 @@ body {
 /* Layout container */
 .app-container {
     display: flex;
-    height: 100vh;
+    height: 100dvh; /* Use dvh */
     width: 100vw;
     position: relative;
     background: radial-gradient(circle at 80% 20%, rgba(0, 136, 204, 0.08) 0%, transparent 40%),
@@ -227,7 +227,7 @@ body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -285,6 +285,7 @@ body {
     padding: 40px;
     overflow-y: auto;
     position: relative;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Glass Cards */
@@ -478,7 +479,7 @@ body {
 
 /* AI Chatbot Styles */
 .chat-container {
-    height: calc(100vh - var(--header-height) - 120px);
+    height: calc(100dvh - var(--header-height) - 120px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -695,7 +696,7 @@ body {
 
 /* Quiz Center Styles */
 .quiz-container {
-    height: calc(100vh - var(--header-height) - 120px);
+    height: calc(100dvh - var(--header-height) - 120px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1188,12 +1189,13 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
         left: 0;
         right: 0;
         width: 100%;
-        height: 68px;
+        height: calc(68px + env(safe-area-inset-bottom)); /* Adjust for notch/home indicator */
         z-index: 1000;
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
         padding: 0 8px;
+        padding-bottom: env(safe-area-inset-bottom);
         background-color: var(--bg-secondary);
         border-top: 1px solid var(--border-color);
         border-right: none;
@@ -1236,7 +1238,7 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
     }
 
     .main-content {
-        height: calc(100vh - 68px);
+        height: calc(100dvh - 68px - env(safe-area-inset-bottom));
     }
 
     .app-header {
@@ -1272,6 +1274,7 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 
     .content-body {
         padding: 16px;
+        padding-bottom: calc(84px + env(safe-area-inset-bottom)); /* Make space for bottom nav to prevent content cut off */
     }
 
     /* Dashboard adjustments */
@@ -1310,7 +1313,7 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 
     /* Chatbot adjustments */
     .chat-container {
-        height: calc(100vh - 64px - 68px - 32px); /* height - header - bottom_nav - margins */
+        height: calc(100dvh - 64px - 68px - env(safe-area-inset-bottom) - 32px); /* height - header - bottom_nav - margins */
     }
 
     .chat-messages {
@@ -1344,7 +1347,7 @@ body.light-theme ::-webkit-scrollbar-thumb:hover {
 
     /* Quiz adjustments */
     .quiz-container {
-        height: calc(100vh - 64px - 68px - 32px);
+        height: calc(100dvh - 64px - 68px - env(safe-area-inset-bottom) - 32px);
         padding: 16px;
     }
 
