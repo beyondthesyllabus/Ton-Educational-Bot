@@ -30,8 +30,8 @@ from telegram.ext import (
 # Environment Setup
 # -------------------------------
 load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+TOKEN = (os.getenv("BOT_TOKEN") or "").strip() or None
+OPENAI_API_KEY = (os.getenv("OPENAI_API_KEY") or "").strip() or None
 IS_RENDER = os.getenv("RENDER") == "true"  # Render automatically sets RENDER=true
 
 # -------------------------------
